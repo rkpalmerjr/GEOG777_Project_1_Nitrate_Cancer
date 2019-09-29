@@ -13,8 +13,9 @@ import arcpy
 
 
 # Project setup
-# Set global variables
+arcpy.env.overwriteOutput = True
 
+# Set global variables
 # Source data
 # Input Data
 # Well Points
@@ -38,7 +39,6 @@ print("\nUser Input:\nIDW K Value: " + str(idwK) + "\nHexbin Size: " + str(hexSi
 # https://desktop.arcgis.com/en/arcmap/10.3/manage-data/administer-file-gdbs/create-file-geodatabase.htm
 #
 print ("\nCreating project geodatabase...")
-arcpy.env.overwriteOutput = True
 arcpy.env.workspace = r"C:\Users\rkpalmerjr\Documents\School\WISC\Fall_2019\GEOG_777_Capstone_in_GIS_Development\Project_1\TESTING\Test_1"
 projectFolder = arcpy.env.workspace
 projectGDB = arcpy.CreateFileGDB_management(projectFolder, "Test.gdb")
@@ -47,6 +47,7 @@ projectGDBPath = os.path.join(projectFolder, "Test.gdb")
 print("\nProject geodatabase created:\n" + projectGDBPath)
 
 # Copy source to project GDB
+# http://desktop.arcgis.com/en/arcmap/10.3/tools/conversion-toolbox/feature-class-to-feature-class.htm
 #
 print("\nCopying source data to project geodatabase...")
 arcpy.FeatureClassToFeatureClass_conversion(wells, projectGDBPath, "Well_Nitrate")
@@ -72,7 +73,6 @@ def runIDW(wells, idwK, projectGDBPath):
 	# Set environment settings
 	arcpy.env.workspace = r"C:\Users\rkpalmerjr\Documents\School\WISC\Fall_2019\GEOG_777_Capstone_in_GIS_Development\Project_1\TESTING\Test_1\Scratch"
 	dataFolder = r"C:\Users\rkpalmerjr\Documents\School\WISC\Fall_2019\GEOG_777_Capstone_in_GIS_Development\Project_1\GEOG777_Project_1_Nitrate_Cancer\Data"
-	arcpy.env.overwriteOutput = True
 
 	# Set local variables for IDW
 	inPointFeatures = os.path.join(dataFolder, wells)
@@ -150,6 +150,7 @@ def runGenerateHexbins(counties, hexSize, hexUnit, projectGDBPath):
 	outputName = "Hexagons_" + str(hexSize) + "_sq_" + hexUnit
 	output = os.path.join(projectGDBPath, outputName)
 	extentFeature = os.path.join(dataFolder, counties)
+	# https://desktop.arcgis.com/en/arcmap/10.3/analyze/arcpy-functions/describe.htm
 	description = arcpy.Describe(extentFeature)
 	extent = description.extent
 	area = str(hexSize) + " Square" + hexUnit
@@ -270,6 +271,7 @@ def runZonalStatsCanRate(canrate, hexBins, projectGDBPath):
 
 
 # Rename fields in the nitrate table with "nitrate_" prefix
+# https://desktop.arcgis.com/en/arcmap/10.3/analyze/arcpy-functions/listfields.htm
 # http://desktop.arcgis.com/en/arcmap/10.6/tools/data-management-toolbox/alter-field-properties.htm
 # http://desktop.arcgis.com/en/arcmap/10.6/analyze/python/mapping-fields.htm
 # http://desktop.arcgis.com/en/arcmap/10.3/tools/conversion-toolbox/table-to-table.htm
@@ -338,6 +340,7 @@ def runPrefixNitrateZSat(projectGDBPath):
 
 
 # Rename fields in the canrate table with "canrate_" prefix
+# https://desktop.arcgis.com/en/arcmap/10.3/analyze/arcpy-functions/listfields.htm
 # http://desktop.arcgis.com/en/arcmap/10.6/tools/data-management-toolbox/alter-field-properties.htm
 # http://desktop.arcgis.com/en/arcmap/10.6/analyze/python/mapping-fields.htm
 # http://desktop.arcgis.com/en/arcmap/10.3/tools/conversion-toolbox/table-to-table.htm
