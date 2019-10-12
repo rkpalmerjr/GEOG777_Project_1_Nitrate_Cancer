@@ -6,6 +6,7 @@
 
 # Import Modules
 import os
+import string
 import arcpy
 
 
@@ -20,8 +21,8 @@ import arcpy
 
 arcpy.env.overwriteOutput = True
 # arcpy.env.addOutputsToMap = True
-mxd = arcpy.mapping.MapDocument("CURRENT")
-df = arcpy.mapping.ListDataFrames(mxd, "Layers")[0]
+# mxd = arcpy.mapping.MapDocument("CURRENT")
+# df = arcpy.mapping.ListDataFrames(mxd, "Layers")[0]
 
 # Get variables
 # Source data
@@ -167,7 +168,9 @@ def runGenerateHexbins(counties, hexSize, hexUnit, projectGDBPath):
 	arcpy.AddMessage("\nGenerating tessellation hexagons...")
 
 	# Set local variables for Generate Tessellation
-	outputName = "Hexagons_" + hexSize + "_sq_" + hexUnit
+	outputName = "Hexagons_" + hexSize + "_Sq_" + hexUnit
+	if ("." in outputName):
+		outputName = outputName.replace(".", "point")
 	output = os.path.join(projectGDBPath, outputName)
 
 	# https://desktop.arcgis.com/en/arcmap/10.3/analyze/arcpy-functions/describe.htm
@@ -196,8 +199,10 @@ def runGenerateHexbins(counties, hexSize, hexUnit, projectGDBPath):
 	arcpy.AddMessage("\n" + arcpy.GetMessages())
 
 
-	# Select hexagons that DO NOT intersect with the counties layer
-	arcpy.SelectLayerByLocation_management(hexBins_lyr, "intersect", counties_lyr, "", "", "INVERT")
+	# Select hexagons that intersect with the counties layer
+	arcpy.SelectLayerByLocation_management(hexBins_lyr, "intersect", counties_lyr, "", "", "")
+	# Switch selection
+	arcpy.SelectLayerByLocation_management(hexBins_lyr, "", "", "", "SWITCH_SELECTION", "")
 	#
 	arcpy.AddMessage("\n" + arcpy.GetMessages())
 
@@ -427,6 +432,7 @@ def runOLS(hexBins_lyr, projectFolder, projectGDBPath):
 	arcpy.SetParameterAsText(10, olsResults)
 	arcpy.SetParameterAsText(11, olsCoefficients)
 	arcpy.SetParameterAsText(12, olsDiagnostics)
+	arcpy.SetParameterAsText(13, olsReport)
 
 	# Delete local variables
 	del hexBins_lyr, olsResults, olsCoefficients, olsDiagnostics, olsReport, projectFolder, projectGDBPath
