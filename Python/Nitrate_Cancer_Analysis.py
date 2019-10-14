@@ -23,8 +23,6 @@ import arcpy
 
 arcpy.env.overwriteOutput = True
 arcpy.env.addOutputsToMap = True
-# mxd = arcpy.mapping.MapDocument("CURRENT")
-# df = arcpy.mapping.ListDataFrames(mxd, "Layers")[0]
 
 # Get variables
 # Source data
@@ -50,8 +48,7 @@ arcpy.AddMessage("\nUser Input:\nIDW K Value: " + idwK + "\nHexbin Size: " + hex
 # https://desktop.arcgis.com/en/arcmap/10.3/manage-data/administer-file-gdbs/create-file-geodatabase.htm
 #
 arcpy.AddMessage("\nCreating project geodatabase...")
-arcpy.env.workspace = r"C:\Users\rkpalmerjr\Documents\School\WISC\Fall_2019\GEOG_777_Capstone_in_GIS_Development\Project_1\SCRATCH"
-projectFolder = r"C:\Users\rkpalmerjr\Documents\School\WISC\Fall_2019\GEOG_777_Capstone_in_GIS_Development\Project_1\TESTING"
+projectFolder = arcpy.env.scratchFolder
 projectGDB = arcpy.CreateFileGDB_management(projectFolder, "Nitrate_Cancer_Analysis.gdb")
 #
 arcpy.AddMessage("\n" + arcpy.GetMessages())
