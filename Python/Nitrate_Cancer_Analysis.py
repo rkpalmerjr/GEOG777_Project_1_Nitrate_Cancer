@@ -129,7 +129,7 @@ def runIDW(wells, idwK, projectGDBPath):
 
 
 # Generate Feature to Raster raster from census tracts cancer rate values
-# http://desktop.arcgis.com/en/arcmap/10.6/tools/spatial-analyst-toolbox/idw.htm
+# http://desktop.arcgis.com/en/arcmap/10.6/tools/conversion-toolbox/feature-to-raster.htm
 def runFeatToRast(tracts, projectGDBPath):
 	#
 	arcpy.AddMessage("\nGenerating cancer rate raster...")
